@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.ratemyzs.app.StartRecording$PlaceholderFragment">
+
+    <TextView
+        android:text="Click Button to Start Recording Accelerometer and then the other to stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonText"
+        android:layout_alignBottom="@+id/startButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="76dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This Button is Start"
+        android:id="@+id/startButton"
+        android:layout_marginTop="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/buttonText"
+        android:layout_alignStart="@+id/buttonText"
+        android:layout_alignRight="@+id/buttonText"
+        android:layout_alignEnd="@+id/buttonText"
+        android:enabled="true"
+        android:clickable="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This Button is Stop"
+        android:id="@+id/stopButton"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/startButton"
+        android:layout_alignStart="@+id/startButton"
+        android:layout_alignRight="@+id/startButton"
+        android:layout_alignEnd="@+id/startButton"
+        android:enabled="true"
+        android:clickable="true" />
+
+</RelativeLayout>
