@@ -46,4 +46,15 @@
         android:enabled="true"
         android:clickable="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/buttonText"
+        android:layout_above="@+id/buttonText"
+        android:text=" "
+        android:id="@+id/accTextView" />
+
 </RelativeLayout>
