@@ -1,5 +1,7 @@
 package com.ratemyzs.app;
 
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -11,11 +13,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import android.app.Activity;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+
+import static android.view.View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION;
 import static android.view.View.OnClickListener;
 
-public class StartRecording extends ActionBarActivity {
+public class StartRecording extends ActionBarActivity implements SensorEventListener {
+
+    public SensorManager mSensorManager;
+    public Sensor mAccelerometer;
+    public TextView accelerometerText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,14 +43,20 @@ public class StartRecording extends ActionBarActivity {
         //            .commit();
         //}
 
+        accelerometerText = (TextView) findViewById(R.id.accTextView);
         Button startButton = (Button) findViewById(R.id.startButton);
         Button stopButton = (Button) findViewById(R.id.stopButton);
+
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+
 
         startButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 showToast("Accelerometer is being listened to");
-                //Code where accelerometer is being engaged
+                onResume();
+
             }
         });
 
@@ -43,9 +64,11 @@ public class StartRecording extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 showToast("Accelerometer is not being listened to");
-                //Where the accelerometer isn't being engaged
+                onPause();
+
             }
         });
+
     }
 
 
@@ -67,6 +90,25 @@ public class StartRecording extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onResume() {
+        super.onResume();
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+
+    }
+
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    public void onSensorChanged(SensorEvent event) {
+        accelerometerText.setText("X: " + event.values[0] + "\nY: " + event.values[1] + "\nZ: " + event.values[0]);
     }
 
     public void showToast(String message)
