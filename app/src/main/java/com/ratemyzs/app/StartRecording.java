@@ -30,6 +30,7 @@ public class StartRecording extends ActionBarActivity implements SensorEventList
     public SensorManager mSensorManager;
     public Sensor mAccelerometer;
     public TextView accelerometerText;
+    public float x,y,z;
 
 
     @Override
@@ -94,8 +95,12 @@ public class StartRecording extends ActionBarActivity implements SensorEventList
 
     protected void onResume() {
         super.onResume();
+
+        //AccelManager man1 = new AccelManager();
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mAccelerometer, 200);
+        //startRecording();
+        //mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     protected void onPause() {
@@ -104,11 +109,51 @@ public class StartRecording extends ActionBarActivity implements SensorEventList
 
     }
 
+    public void startRecording()
+    {
+        while(true) //change to factor if actually running
+        {
+
+            //long startThirty = System.currentTimeMillis();
+            long endThirty = System.currentTimeMillis() + 30000;
+
+            while (System.currentTimeMillis() != endThirty)
+            {
+                float zerop1 = (x + 1);
+                float zerom1 = (x - 1);
+                float onep1 = (y + 1);
+                float onem1 = (y - 1);
+                float twop1 = (z + 1);
+                float twom1 = (z - 1);
+
+                if ((x == zerop1 || x == zerom1) || (y == onep1  || y == onem1) || (z == twop1  || z == twom1));
+            }
+
+        }
+    }
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
     public void onSensorChanged(SensorEvent event) {
-        accelerometerText.setText("X: " + event.values[0] + "\nY: " + event.values[1] + "\nZ: " + event.values[0]);
+        x = event.values[0] * 10;
+        y = event.values[1] * 10;
+        z = event.values[2] * 10;
+
+        accelerometerText.setText("X: " + x + "\nY: " + y + "\nZ: " + z);
+//        final float alpha = (float) 0.8;
+//        float[] gravity = new float[3];
+//        float[] linear_acceleration = new float[3];
+
+//        gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
+//        gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
+//        gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
+
+//        linear_acceleration[0] = event.values[0] - gravity[0];
+//        linear_acceleration[1] = event.values[1] - gravity[1];
+//        linear_acceleration[2] = event.values[2] - gravity[2];
+
+//        accelerometerText.setText("X: " + (linear_acceleration[0] * 10) + "\nY: " + (linear_acceleration[1] * 10) + "\nZ: " + (linear_acceleration[0] * 10));
+
     }
 
     public void showToast(String message)
