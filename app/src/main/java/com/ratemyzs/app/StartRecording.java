@@ -22,15 +22,22 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.util.ArrayList;
+
 import static android.view.View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION;
 import static android.view.View.OnClickListener;
 
-public class StartRecording extends ActionBarActivity implements SensorEventListener {
+public class StartRecording extends ActionBarActivity { // implements SensorEventListener {
 
     public SensorManager mSensorManager;
     public Sensor mAccelerometer;
-    public TextView accelerometerText;
+    public TextView accelerometerText, changeText;
     public float x,y,z;
+    public boolean running = false;
+    public ArrayList<Integer> changeList = new ArrayList<Integer>();
+    private State rState = State.PAUSED;
+    private int count;
+    public AccelManager accel = new AccelManager();
 
 
     @Override
@@ -44,11 +51,13 @@ public class StartRecording extends ActionBarActivity implements SensorEventList
         //            .commit();
         //}
 
-        accelerometerText = (TextView) findViewById(R.id.accTextView);
+        //accelerometerText = (TextView) findViewById(R.id.accTextView);
+        //changeText = (TextView) findViewById(R.id.changeView);
+
         Button startButton = (Button) findViewById(R.id.startButton);
         Button stopButton = (Button) findViewById(R.id.stopButton);
 
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
 
 
 
@@ -56,7 +65,7 @@ public class StartRecording extends ActionBarActivity implements SensorEventList
             @Override
             public void onClick(View v) {
                 showToast("Accelerometer is being listened to");
-                onResume();
+                start();
 
             }
         });
@@ -65,11 +74,17 @@ public class StartRecording extends ActionBarActivity implements SensorEventList
             @Override
             public void onClick(View view) {
                 showToast("Accelerometer is not being listened to");
-                onPause();
+                pause();
 
             }
         });
 
+//        changeList.add(1);
+//        changeList.add(2);
+//        changeList.add(3);
+//        changeList.add(4);
+//        changeList.add(5);
+//        changeList.add(6);
     }
 
 
@@ -93,53 +108,89 @@ public class StartRecording extends ActionBarActivity implements SensorEventList
         return super.onOptionsItemSelected(item);
     }
 
+    public enum State {RUNNING, PAUSED};
+
+    public void start() {
+        accel.startRecording();
+    }
+
+    public void pause() {
+        accel.pause();
+    }
+    /**
     protected void onResume() {
         super.onResume();
 
         //AccelManager man1 = new AccelManager();
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, mAccelerometer, 200);
-        //startRecording();
-        //mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-    }
 
+        //boolean sRecord = true;
+        changeText.setText("Accessing onResume");
+        startRecording();
+        //mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }*/
+
+    /**
     protected void onPause() {
         super.onPause();
+        rState = State.PAUSED;
         mSensorManager.unregisterListener(this);
 
-    }
+        changeText.setText(changeList.toString());
 
+    } */
+
+    /**
     public void startRecording()
     {
-        while(true) //change to factor if actually running
+
+        //running = true;
+        changeList = new ArrayList<Integer>();
+        //rState = State.RUNNING;
+
+        ++count;
+        if(rState == State.PAUSED)
         {
+            rState = State.RUNNING;
+            changeText.append("\nRunning" + count);
 
             //long startThirty = System.currentTimeMillis();
             long endThirty = System.currentTimeMillis() + 30000;
+            int change = 0;
 
-            while (System.currentTimeMillis() != endThirty)
+            if (System.currentTimeMillis() != endThirty)
             {
-                float zerop1 = (x + 1);
-                float zerom1 = (x - 1);
-                float onep1 = (y + 1);
-                float onem1 = (y - 1);
-                float twop1 = (z + 1);
-                float twom1 = (z - 1);
+                //changeText.append("\n\nRunning2");
 
-                if ((x == zerop1 || x == zerom1) || (y == onep1  || y == onem1) || (z == twop1  || z == twom1));
-            }
+                //float zerop1 = (x + 1);
+                //float zerom1 = (x - 1);
+                //float onep1 = (y + 1);
+                //float onem1 = (y - 1);
+                //float twop1 = (z + 1);
+                //float twom1 = (z - 1);
 
-        }
-    }
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
+               // if ((x == zerop1 || x == zerom1) || (y == onep1  || y == onem1) || (z == twop1  || z == twom1))
+               // {
+                   // ++change;
+                //};
+            //}
 
-    public void onSensorChanged(SensorEvent event) {
-        x = event.values[0] * 10;
-        y = event.values[1] * 10;
-        z = event.values[2] * 10;
+            //changeList.add(change);
 
-        accelerometerText.setText("X: " + x + "\nY: " + y + "\nZ: " + z);
+        //}
+    }*/
+
+
+    //public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    //}
+
+    //public void onSensorChanged(SensorEvent event) {
+        //x = event.values[0] * 10;
+        //y = event.values[1] * 10;
+        //z = event.values[2] * 10;
+
+        //accelerometerText.setText("X: " + x + "\nY: " + y + "\nZ: " + z);
 //        final float alpha = (float) 0.8;
 //        float[] gravity = new float[3];
 //        float[] linear_acceleration = new float[3];
@@ -154,7 +205,7 @@ public class StartRecording extends ActionBarActivity implements SensorEventList
 
 //        accelerometerText.setText("X: " + (linear_acceleration[0] * 10) + "\nY: " + (linear_acceleration[1] * 10) + "\nZ: " + (linear_acceleration[0] * 10));
 
-    }
+    //}
 
     public void showToast(String message)
     {
